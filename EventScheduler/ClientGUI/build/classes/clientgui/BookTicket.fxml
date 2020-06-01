@@ -7,7 +7,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane id="AnchorPane" prefHeight="804.0" prefWidth="1175.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/11.0.1" fx:controller="clientgui.BookTicketController">
+<AnchorPane id="AnchorPane" prefHeight="804.0" prefWidth="1175.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="clientgui.BookTicketController">
    <children>
       <Label layoutX="57.0" layoutY="55.0" prefHeight="95.0" prefWidth="350.0" text="Welcome Search for an event  ">
          <font>
@@ -23,6 +23,6 @@
       </Label>
       <ComboBox fx:id="eventChooserCbox" layoutX="57.0" layoutY="328.0" prefHeight="59.0" prefWidth="329.0" />
       <Button fx:id="bookbtn" layoutX="423.0" layoutY="328.0" mnemonicParsing="false" onAction="#bookbtn" prefHeight="59.0" prefWidth="129.0" text="Book it" />
+      <Button layoutX="602.0" layoutY="249.0" mnemonicParsing="false" onAction="#back" prefHeight="53.0" prefWidth="121.0" text="BACK" />
    </children>
 </AnchorPane>
-

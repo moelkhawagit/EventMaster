@@ -31,6 +31,10 @@ import java.awt.image.RenderedImage;
 import java.io.IOException;
 import java.util.Date;
 import java.util.Random;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.stage.Stage;
 
 
 /**
@@ -158,7 +162,13 @@ public class BookTicketController implements Initializable {
        }
     }
 
-    
+    public void back(ActionEvent event) throws IOException{
+        Parent root= FXMLLoader.load(getClass().getResource("Homepage.fxml"));
+        Scene receivingScene = new Scene(root);
+        Stage window=(Stage)((Node)event.getSource()).getScene().getWindow();
+        window.setScene(receivingScene);
+        window.show();  
+    }
     
     @Override
     public void initialize(URL url, ResourceBundle rb) {

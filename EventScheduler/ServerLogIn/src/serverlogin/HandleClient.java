@@ -15,10 +15,10 @@ import java.sql.SQLException;
 public class HandleClient implements Runnable{
    
     private final Socket socket;
-    static DataInputStream in;
-    static DataOutputStream out;
-    static String request;
-    static String requestArray[];
+    public DataInputStream in;
+    public DataOutputStream out;
+    public String request;
+    public String requestArray[];
     
     
     
@@ -38,18 +38,19 @@ public class HandleClient implements Runnable{
                 case "0": logInCheck();break;
                 case "1": registerNewUser();break;
                 case "2": displayAvailableSlots();break;
-                case "3": scheduleAnEvent();break;
-                case "4": bookATicket();break;
+                case "3": ServerLogIn.scheduleQueue.put(this); break;
+                case "23": searchForAnEvent();break;
+                case "25": bookATicket();break;
                 case "5": displayUsersScheduledEvents();break;
             }
         }
         }
-        catch(IOException e){
+        catch(Exception e){
             System.out.println(e);
         }
     }
     
-    private void logInCheck() throws IOException{
+    private synchronized void logInCheck() throws IOException{
         try{
             PreparedStatement stmt = ServerLogIn.con.prepareStatement("SELECT * FROM users WHERE username = ? AND password = ?",ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
             stmt.setString(1,requestArray[1]) ;
@@ -66,7 +67,7 @@ public class HandleClient implements Runnable{
             System.out.println(e);
         }
     }
-    private void registerNewUser() throws IOException{
+    private synchronized void registerNewUser() throws IOException{
          try{
             PreparedStatement stmt = ServerLogIn.con.prepareStatement("INSERT INTO users VALUES (?, ?, ?, ?, ?, ?, ?)",ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
             stmt.setString(1, requestArray[1]) ;
@@ -84,7 +85,7 @@ public class HandleClient implements Runnable{
             System.out.println(e);
         }
     }
-    private void displayAvailableSlots() throws IOException{
+    private synchronized void displayAvailableSlots() throws IOException{
         String response = "";
         try{
             PreparedStatement stmt = ServerLogIn.con.prepareStatement("SELECT * FROM reservations WHERE room_id=? AND Event_date=? ORDER BY period ASC",ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
@@ -100,29 +101,12 @@ public class HandleClient implements Runnable{
         }
     }
 
-    private void scheduleAnEvent() throws IOException {
-        System.out.println("Entered");
-        try{
-            PreparedStatement stmt = ServerLogIn.con.prepareStatement("INSERT INTO reservations VALUES (?, ?, ?, ?, ?, 50)",ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
-            stmt.setString(1, requestArray[1]) ;
-            stmt.setString(2, requestArray[3]);
-            stmt.setString(3, requestArray[2]);
-            stmt.setString(4, requestArray[4]);
-            stmt.setString(5, requestArray[5]);
-            stmt.execute();
-            out.writeUTF("scheduled");
-        }
-        catch(SQLException e){
-            out.writeUTF("error");
-            System.out.println(e);
-        }
-    }
 
-    private void bookATicket() {
+    private synchronized void bookATicket() {
         //Method should handle ticket booking
     }
 
-    private void displayUsersScheduledEvents() throws IOException {
+    private synchronized void displayUsersScheduledEvents() throws IOException {
         String response = "";
         try{
             PreparedStatement stmt = ServerLogIn.con.prepareStatement("SELECT * FROM reservations WHERE username=? ORDER BY event_date ASC, period ASC",ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
@@ -131,6 +115,23 @@ public class HandleClient implements Runnable{
             while(rs.next())
                 response = response + rs.getString("Event_name")+ " " +rs.getString("Event_date") + " " +rs.getString("Period") + " " + rs.getString("Room_id")+"\n";
             out.writeUTF(response);
+        }
+        catch(SQLException e){
+            System.out.println(e);
+        }
+    }
+
+    private synchronized void searchForAnEvent() throws IOException {
+        try{
+            PreparedStatement stmt = ServerLogIn.con.prepareStatement("SELECT * FROM reservations WHERE event_name = ?",ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
+            stmt.setString(1, requestArray[1]) ;
+            ResultSet rs = stmt.executeQuery();
+            if(rs.next()){
+                out.writeUTF("Event1");
+            }
+            else{
+                out.writeUTF("Event0");
+            }
         }
         catch(SQLException e){
             System.out.println(e);

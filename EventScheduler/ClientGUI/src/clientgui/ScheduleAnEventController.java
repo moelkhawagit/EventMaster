@@ -11,6 +11,7 @@ import java.time.LocalDate;
 import java.util.ResourceBundle;
 import javafx.fxml.Initializable;
 
+
 /**
  *
  * @author Essam Hisham
@@ -70,8 +71,8 @@ public class ScheduleAnEventController implements Initializable {
         }
 
     }
-
     
+        
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         roomIdCbox.getItems().clear();

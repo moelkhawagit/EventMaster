@@ -106,12 +106,15 @@ public class HandleClient implements Runnable{
 
     private synchronized void bookATicket() throws IOException {
        try{
-            stmt = ServerLogIn.con.prepareStatement("UPDATE reservations SET capacity = capacity-1 WHERE (Period = ? AND Event_date = ? AND Event_name = ?)");
+            stmt = ServerLogIn.con.prepareStatement("UPDATE reservations SET capacity = capacity-1 WHERE (Period = ? AND Event_date = ? AND Event_name = ? AND capacity >= 0)");
             stmt.setString(1, requestArray[1]) ;
             stmt.setString(2, requestArray[2]);
             stmt.setString(3, requestArray[3]);
-            stmt.execute();
-            out.writeUTF("Success");
+            int rowsAffected =  stmt.executeUpdate();
+            if ( rowsAffected != 0)
+                out.writeUTF("Success");
+            else
+                out.writeUTF("error");
         }
         catch(SQLException e){
             out.writeUTF("error");
@@ -137,7 +140,11 @@ public class HandleClient implements Runnable{
     private synchronized void searchForAnEvent() throws IOException {
         try{
             stmt = ServerLogIn.con.prepareStatement("SELECT * FROM reservations WHERE event_name = ?",ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
-            stmt.setString(1, requestArray[1]) ;
+            String eventName = "";
+            for(int i=1; i < requestArray.length; i++){
+                eventName = eventName + requestArray[i] + " ";
+            }
+            stmt.setString(1, eventName) ;
             rs = stmt.executeQuery();
             if(rs.next()){
                 out.writeUTF("Event1");

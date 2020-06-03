@@ -78,18 +78,24 @@ public class ScheduleAnEventController implements Initializable {
             EventManagerClass newEventManager;
             newEventManager = new EventManagerClass();
             newEventManager.createEvent(EventTitle,localDate.toString(),RoomId,transfarevalue);
+           if (newEventManager.duh == true ){
+                new Alert(Alert.AlertType.INFORMATION, "EVENT WAS ADDED , Successfully  ").showAndWait();
+           } 
+           else {
+               new Alert(Alert.AlertType.CONFIRMATION, "EVENT WASN'T ADDED , Sorry  ").showAndWait();
+           }
         }
 
     }
     
-    public void back(ActionEvent event) throws IOException{
-        Parent root= FXMLLoader.load(getClass().getResource("Homepage.fxml"));
-        Scene receivingScene = new Scene(root);
-        Stage window=(Stage)((Node)event.getSource()).getScene().getWindow();
-        window.setScene(receivingScene);
-        window.show();  
-    }
     
+    public void back(ActionEvent event) throws IOException{
+       Parent root = FXMLLoader.load(getClass().getResource("Homepage.fxml"));
+        Stage stage= (Stage) ((Node) event.getSource()).getScene().getWindow();
+        Scene scene = new Scene(root);
+        stage.setScene(scene);
+        stage.show();
+    }
         
     @Override
     public void initialize(URL url, ResourceBundle rb) {

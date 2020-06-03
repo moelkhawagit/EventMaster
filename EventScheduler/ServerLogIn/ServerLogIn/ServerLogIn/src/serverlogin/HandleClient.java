@@ -109,7 +109,12 @@ public class HandleClient implements Runnable{
             stmt = ServerLogIn.con.prepareStatement("UPDATE reservations SET capacity = capacity-1 WHERE (Period = ? AND Event_date = ? AND Event_name = ? AND capacity > 0)");
             stmt.setString(1, requestArray[1]) ;
             stmt.setString(2, requestArray[2]);
-            stmt.setString(3, requestArray[3]);
+           // stmt.setString(3, requestArray[3]);
+            String eventName = "";
+            for(int i=3; i < requestArray.length; i++){
+                eventName = eventName + requestArray[i] + " ";
+            }
+            stmt.setString(3, eventName);
             int rowsAffected =  stmt.executeUpdate();
             if ( rowsAffected != 0)
                 out.writeUTF("Success");

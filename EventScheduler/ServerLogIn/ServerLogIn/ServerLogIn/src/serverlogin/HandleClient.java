@@ -106,7 +106,7 @@ public class HandleClient implements Runnable{
 
     private synchronized void bookATicket() throws IOException {
        try{
-            stmt = ServerLogIn.con.prepareStatement("UPDATE reservations SET capacity = capacity-1 WHERE (Period = ? AND Event_date = ? AND Event_name = ? AND capacity >= 0)");
+            stmt = ServerLogIn.con.prepareStatement("UPDATE reservations SET capacity = capacity-1 WHERE (Period = ? AND Event_date = ? AND Event_name = ? AND capacity > 0)");
             stmt.setString(1, requestArray[1]) ;
             stmt.setString(2, requestArray[2]);
             stmt.setString(3, requestArray[3]);

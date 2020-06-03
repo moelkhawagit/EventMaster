@@ -5,6 +5,7 @@
  */
 package clientgui;
 
+import static com.oracle.nio.BufferSecrets.instance;
 import java.net.URL;
 import java.util.ResourceBundle;
 import javafx.fxml.Initializable;
@@ -29,11 +30,13 @@ import javafx.stage.FileChooser;
 import javax.imageio.ImageIO;
 import java.awt.image.RenderedImage;
 import java.io.IOException;
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.Random;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
+import javafx.scene.control.DatePicker;
 import javafx.stage.Stage;
 
 
@@ -49,12 +52,15 @@ public class BookTicketController implements Initializable {
     @FXML
     public Button bookbtn;
     @FXML
+    public Button backbtn;
+    @FXML
     public Button searchbtn ;
     @FXML
     public TextField eventTitleSearchtxt;
 
     String FoundedEvent = "";
-    
+    @FXML
+    public DatePicker datePickerCbox;
     
     private static void PrintTicket(String info) {
         FileChooser directoryPicker = new FileChooser();
@@ -78,6 +84,17 @@ public class BookTicketController implements Initializable {
         }
 
     }
+    
+    
+    public void back(ActionEvent event) throws IOException{
+        
+        Parent root= FXMLLoader.load(getClass().getResource("Homepage.fxml"));
+        Scene receivingScene = new Scene(root);
+        Stage window=(Stage)((Node)event.getSource()).getScene().getWindow();
+        window.setScene(receivingScene);
+        window.show();
+    }
+    
     public void searchbtn (ActionEvent event) throws IOException {
          if( eventTitleSearchtxt.getText().isEmpty()){
             new Alert(Alert.AlertType.WARNING, "Search field was left empty ! ").showAndWait();
@@ -91,19 +108,28 @@ public class BookTicketController implements Initializable {
         // if found : Reserver Send "Event1"
         if("Event1".equals(ClientGUI.in.readUTF())){
           System.out.println("Event found ");
+          new Alert(Alert.AlertType.INFORMATION, "Goood NEWS , EVENT FOUND ").showAndWait();
           FoundedEvent = eventTitleSearchtxt.getText();
         }
         // if found : Reserver Send "Event0"
-        else if ("Event0".equals(ClientGUI.in.readUTF())){
+        else {
           System.out.println("Event not found ");
-            
+            new Alert(Alert.AlertType.INFORMATION, "BAD NEWS , EVENT NOT FOUND ").showAndWait();
         }
          }
     }
 
     public void bookbtn(ActionEvent event) throws IOException {
+        boolean flag = false;
         String transfarevalue = "";
         String EventName = "";
+        LocalDate localDate = datePickerCbox.getValue();
+        if (localDate.isBefore(LocalDate.now())) {
+            new Alert(Alert.AlertType.WARNING, "Please enter a valid date ! ").showAndWait();
+        } else {
+                //do nothing
+                flag = true;
+        }
         Random random = new Random();
         DateFormat tdate = new SimpleDateFormat("yyyyMMdd");
         String ticketnum = tdate.format(new Date()) + String.valueOf(random.nextInt(999999999));
@@ -126,49 +152,28 @@ public class BookTicketController implements Initializable {
         }
         
         
-        if(transfarevalue == "P1" ) {
-            bookbtn.setDisable(true);
-        }
-        else{
-            String info = "";
-            info = eventChooserCbox.getValue().toString();
-            EventName = eventTitleSearchtxt.getText();
-                PrintTicket("Hello Your ticket number is : " + ticketnum + " and can  successfully attend class : " + " " + EventName + "@" + info);
-         }
         
         ///// Communicating With the Server ///////////////////////////////////////
         String str = "";
         
-        // //Message Format for Booking An Event : "25 P1 Networks"
-        str += "25" + " " + transfarevalue + " " + FoundedEvent  ;
+        // //Message Format for Booking An Event : "25 P1 Date Networks"
+        str += "25" + " " + transfarevalue + " "  + localDate + " " + FoundedEvent  ;
         System.out.println(str);
        ClientGUI.out.writeUTF(str);
         
         // response Message "error" if the EVENT CAN'T be booked at choosen time slot
-        if("error".equals(ClientGUI.in.readUTF())){
-            System.out.println("Event wasn't Book ");
-             new Alert(Alert.AlertType.WARNING, " Event wasn't Book Choose another time slot").showAndWait();
-        }
+       
         
-        // response Message "Success" if the EVENT CAN be booked at choosen time slot
-         if ("Success".equals(ClientGUI.in.readUTF())){
-            System.out.println("Event has been Booked ");
+             System.out.println("Event has been Booked ");
              new Alert(Alert.AlertType.INFORMATION, " Event was Booked").showAndWait();
              String info = "";
-              info = eventChooserCbox.getValue().toString();
-            EventName = eventTitleSearchtxt.getText();
-                PrintTicket("Hello Your ticket number is : " + ticketnum + " and can  successfully attend class : " + " " + EventName + "@" + info);
-        }
+             info = eventChooserCbox.getValue().toString();
+             EventName = eventTitleSearchtxt.getText();
+             PrintTicket("Hello Your ticket number is : " + ticketnum + " and can  successfully attend class : " + " " + EventName + "@" + info + " " + "Date" + localDate);
        }
     }
 
-    public void back(ActionEvent event) throws IOException{
-        Parent root= FXMLLoader.load(getClass().getResource("Homepage.fxml"));
-        Scene receivingScene = new Scene(root);
-        Stage window=(Stage)((Node)event.getSource()).getScene().getWindow();
-        window.setScene(receivingScene);
-        window.show();  
-    }
+    
     
     @Override
     public void initialize(URL url, ResourceBundle rb) {

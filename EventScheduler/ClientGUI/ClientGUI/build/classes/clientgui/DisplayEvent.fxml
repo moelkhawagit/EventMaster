@@ -13,6 +13,8 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.paint.LinearGradient?>
+<?import javafx.scene.paint.Stop?>
 <?import javafx.scene.text.Font?>
 
 <AnchorPane id="AnchorPane" prefHeight="804.0" prefWidth="1175.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="clientgui.DisplayEventController">
@@ -28,33 +30,41 @@
                <font>
                   <Font size="64.0" />
                </font>
+               <textFill>
+                  <LinearGradient endX="1.0" endY="1.0">
+                     <stops>
+                        <Stop color="#dd8d03" />
+                        <Stop color="BLACK" offset="1.0" />
+                     </stops>
+                  </LinearGradient>
+               </textFill>
             </Label>
             <Separator orientation="VERTICAL" prefHeight="35.0" prefWidth="10.0" />
             <HBox alignment="CENTER" prefHeight="61.0" prefWidth="1201.0">
                <children>
                   <Label alignment="BOTTOM_LEFT" graphicTextGap="60.0" prefHeight="29.0" prefWidth="154.0" text="Select Room">
                      <font>
-                        <Font size="24.0" />
+                        <Font name="System Bold" size="24.0" />
                      </font>
                   </Label>
-                  <ComboBox fx:id="roomSelector" prefHeight="36.0" prefWidth="192.0" promptText="Room No." visibleRowCount="5" />
+                  <ComboBox fx:id="roomSelector" prefHeight="36.0" prefWidth="192.0" promptText="Room No." style="-fx-background-color: #CC761F; -fx-border-color: #000000; -fx-background-radius: 50; -fx-border-radius: 50;" visibleRowCount="5" />
                   <Separator prefWidth="200.0" />
                   <Label prefHeight="29.0" prefWidth="139.0" text="Select Date">
                      <font>
-                        <Font size="24.0" />
+                        <Font name="System Bold" size="24.0" />
                      </font>
                   </Label>
-                  <DatePicker fx:id="datePick" promptText="Event Date" />
+                  <DatePicker fx:id="datePick" promptText="Event Date" style="-fx-background-color: #CC761F; -fx-border-color: #CC761F;" />
                </children>
             </HBox>
             <Separator orientation="VERTICAL" prefHeight="16.0" prefWidth="1.0" />
-            <Button fx:id="backbtn" mnemonicParsing="false" onAction="#back" prefHeight="45.0" prefWidth="155.0" text="Back" translateX="125.0" translateY="50.0">
+            <Button fx:id="backbtn" mnemonicParsing="false" onAction="#back" prefHeight="45.0" prefWidth="155.0" stylesheets="@AllButtons.css" text="Back" translateX="125.0" translateY="50.0">
                <VBox.margin>
                   <Insets bottom="5.0" />
                </VBox.margin>
             </Button>
-            <Button fx:id="dispBtn" mnemonicParsing="false" onAction="#display" prefHeight="45.0" prefWidth="155.0" text="Display!" translateX="-125.0" />
-            <TableView fx:id="table" editable="true" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="486.0" prefWidth="406.0">
+            <Button fx:id="dispBtn" mnemonicParsing="false" onAction="#display" prefHeight="45.0" prefWidth="155.0" stylesheets="@AllButtons.css" text="Display!" translateX="-125.0" />
+            <TableView fx:id="table" editable="true" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="486.0" prefWidth="406.0" style="-fx-background-color: #CC761F; -fx-background-radius: 10; -fx-border-color: #000000;">
               <columns>
                 <TableColumn fx:id="period" prefWidth="200.0" text="Period" />
                 <TableColumn fx:id="status" prefWidth="200.0" text="Status" />

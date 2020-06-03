@@ -11,12 +11,13 @@ import java.net.Socket;
  *
  * @author Essam Hisham
  */
+
 public class EventManagerClass {
     private String eventTitle,date,roomID,TimeSlot;
     private Socket clientSocket;
     private DataOutputStream dataOut;
     private DataInputStream dataIn;
-
+    public boolean duh = false;
     public EventManagerClass() throws IOException {
         setUpConnection();
     }
@@ -34,19 +35,23 @@ public class EventManagerClass {
 
 
     private void insertEvent() throws IOException{
+        
         String str = "";
         str += "3" + " " + roomID + " " + TimeSlot + " " + date + " " + eventTitle +" "+ LogInSceneController.username ;
         System.out.println(str);
         dataOut.writeUTF(str);
-        if("error".equals(dataIn.readUTF())){
+        if("Event0".equals(dataIn.readUTF())){
             System.out.println("Event wasn't added ");
         }
         else{
             System.out.println("Event has been added ");
+            duh = true;
         }
     }
 
-
+    private boolean duhvalue (){
+        return duh;
+    }
     public void createEvent(String eventTitle, String date,String roomID,String TimeSlot) throws IOException
     {
         this.eventTitle = eventTitle; this.TimeSlot = TimeSlot; this.date = date ; this.roomID = roomID;

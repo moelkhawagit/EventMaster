@@ -87,7 +87,7 @@ public class DisplayEventController implements Initializable {
          int i=0;
          while (l!=0){
              splitLine = splitWhole[i].split(" ");
-            switch (splitLine[1])
+            switch (splitLine[0])
              {
                  case "P1": indicator[0] = 1; break;
                  case "P2": indicator[1] = 1; break;
@@ -106,7 +106,11 @@ public class DisplayEventController implements Initializable {
                   info.add(new Table("P"+(i+1),"Available"));
              else{
                   splitLine = splitWhole[j].split(" ");
-                  info.add(new Table(splitLine[1] + ": " + splitLine[0],"Not Available"));
+                  String event_name = "";
+                  for(int k=1; k < splitLine.length; k++){
+                      event_name = event_name + splitLine[k] + " ";
+                  }
+                  info.add(new Table(splitLine[0] + ": " + event_name,"Not Available"));
                   j++;    
              }
              

@@ -95,7 +95,7 @@ public class HandleClient implements Runnable{
             stmt.setString(2, requestArray[2]);
             rs = stmt.executeQuery();
             while(rs.next())
-                response = response + rs.getString("Event_name")+ " " +rs.getString("Period") +"\n";
+                response = response + rs.getString("Period")+ " " +rs.getString("Event_name") +"\n";
             out.writeUTF(response);
         }
         catch(SQLException e){

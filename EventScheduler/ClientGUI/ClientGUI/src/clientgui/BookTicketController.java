@@ -173,7 +173,7 @@ public class BookTicketController implements Initializable {
              str3 = ClientGUI.in.readUTF();
              System.out.println(str3);
              Alert alert = new Alert(AlertType.INFORMATION);
-                alert.setTitle("Couldn't booked for this date");
+                alert.setTitle(" Selected event isn't available at the specified time ");
                 alert.setHeaderText("other available dates ");
                 alert.setContentText(str3);
                 alert.showAndWait();

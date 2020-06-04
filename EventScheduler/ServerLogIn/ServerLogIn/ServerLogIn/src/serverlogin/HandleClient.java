@@ -41,6 +41,7 @@ public class HandleClient implements Runnable{
                 case "23": searchForAnEvent();break;
                 case "25": bookATicket();break;
                 case "5": displayUsersScheduledEvents();break;
+                case "6" : searchForDate();break;
             }
         }
         }
@@ -162,5 +163,26 @@ public class HandleClient implements Runnable{
             System.out.println(e);
         }
     }
+   
+   
+   private synchronized void searchForDate() throws IOException {
+           String response = "";
+        try{
+            stmt = ServerLogIn.con.prepareStatement("SELECT * FROM reservations WHERE event_name = ?",ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
+            String eventName = "";
+            for(int i=1; i < requestArray.length; i++){
+                eventName = eventName + requestArray[i] + " ";
+            }
+            stmt.setString(1, eventName) ;
+            rs = stmt.executeQuery();
+            while(rs.next())
+                response = response + rs.getString("Event_name")+ " " +rs.getString("Event_date") + " " +rs.getString("Period") +"\n";
+            out.writeUTF(response);
+        }
+        catch(SQLException e){
+            System.out.println(e);
+        }
+    
+}
     
 }

@@ -64,7 +64,12 @@
                </VBox.margin>
             </Button>
             <Button fx:id="dispBtn" mnemonicParsing="false" onAction="#display" prefHeight="45.0" prefWidth="155.0" stylesheets="@AllButtons.css" text="Display!" translateX="-125.0" />
-            <TableView fx:id="table" editable="true" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="486.0" prefWidth="406.0" style="-fx-background-color: #CC761F; -fx-background-radius: 10; -fx-border-color: #000000;">
+            <Label fx:id="closest" translateX="-400.0" translateY="120.0">
+               <font>
+                  <Font name="System Bold" size="18.0" />
+               </font>
+            </Label>
+            <TableView fx:id="table" editable="true" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="282.0" prefWidth="406.0" style="-fx-background-color: #CC761F; -fx-background-radius: 10; -fx-border-color: #000000;">
               <columns>
                 <TableColumn fx:id="period" prefWidth="200.0" text="Period" />
                 <TableColumn fx:id="status" prefWidth="200.0" text="Status" />

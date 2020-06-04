@@ -8,7 +8,10 @@ package clientgui;
 import java.io.IOException;
 import java.net.URL;
 import java.time.format.DateTimeFormatter;
+import java.util.Date;
 import java.util.ResourceBundle;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -21,6 +24,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.DatePicker;
+import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
@@ -40,6 +44,7 @@ public class DisplayEventController implements Initializable {
     @FXML 
     private Button dispBtn;
     @FXML private Button backbtn;
+    @FXML private Label closest;
     @FXML private TableView<Table> table;
     @FXML private TableColumn<Table,String> period;
     @FXML private TableColumn<Table,String> status;
@@ -146,7 +151,36 @@ public class DisplayEventController implements Initializable {
         // TODO
         roomSelector.setItems(list);
         
-         
+         // Closest Event Code
+         int day=04;
+         int month = 06;
+         String date ="69 "+"2020-"+month+"-"+day ;
+        try {
+            ClientGUI.out.writeUTF(date);
+            
+            while (true){
+             String   response = ClientGUI.in.readUTF();
+             System.out.println("passed");
+             if ("".equals(response)){
+                 day++;
+                 date ="69 "+"2020-"+month+"-"+day ;
+                  ClientGUI.out.writeUTF(date);
+             }
+             else if (day>=30){
+                 day =01;
+             month++;
+             
+             }
+             else
+             {
+                 closest.setText("Earliest Event: " + month + "-" + day + "-2020" + "\n"+response);
+                 break;
+             }
+            }
+            
+        } catch (IOException ex) {
+            Logger.getLogger(DisplayEventController.class.getName()).log(Level.SEVERE, null, ex);
+        }
         
         
        

@@ -42,6 +42,7 @@ public class HandleClient implements Runnable{
                 case "25": bookATicket();break;
                 case "5": displayUsersScheduledEvents();break;
                 case "6" : searchForDate();break;
+                case "69" : displayClosestEvent(); break;
             }
         }
         }
@@ -94,6 +95,22 @@ public class HandleClient implements Runnable{
             stmt = ServerLogIn.con.prepareStatement("SELECT * FROM reservations WHERE room_id=? AND Event_date=? ORDER BY period ASC",ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
             stmt.setString(1, requestArray[1]) ;
             stmt.setString(2, requestArray[2]);
+            rs = stmt.executeQuery();
+            while(rs.next())
+                response = response + rs.getString("Period")+ " " +rs.getString("Event_name") +"\n";
+            out.writeUTF(response);
+        }
+        catch(SQLException e){
+            System.out.println(e);
+        }
+    }
+    
+    // Start of extra Functions of first event
+    private synchronized void displayClosestEvent() throws IOException{
+        String response = "";
+        try{
+            stmt = ServerLogIn.con.prepareStatement("SELECT * FROM reservations WHERE Event_date=? ORDER BY period ASC",ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
+            stmt.setString(1, requestArray[1]) ;
             rs = stmt.executeQuery();
             while(rs.next())
                 response = response + rs.getString("Period")+ " " +rs.getString("Event_name") +"\n";

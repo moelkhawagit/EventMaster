@@ -36,6 +36,7 @@ import java.util.Random;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.DatePicker;
 import javafx.stage.Stage;
 
@@ -162,10 +163,22 @@ public class BookTicketController implements Initializable {
        ClientGUI.out.writeUTF(str);
         String Server_response = ClientGUI.in.readUTF();
         // response Message "error" if the EVENT CAN'T be booked at choosen time slot
-        if(Server_response.equals("error")){
+          if(Server_response.equals("error")){
+            String str2 = "";
+             String str3 = "";
             System.out.println("Event wasn't Booked");
-             new Alert(Alert.AlertType.WARNING, " Event wasn't Book Choose another time slot").showAndWait();
+            str2+= "6" + " " + FoundedEvent ;
+             System.out.println(str2);
+             ClientGUI.out.writeUTF(str2);
+             str3 = ClientGUI.in.readUTF();
+             System.out.println(str3);
+             Alert alert = new Alert(AlertType.INFORMATION);
+                alert.setTitle("Couldn't booked for this date");
+                alert.setHeaderText("other available dates ");
+                alert.setContentText(str3);
+                alert.showAndWait();
         }
+        
         
         // response Message "Success" if the EVENT CAN be booked at choosen time slot
         if (Server_response.equals("Success")){
